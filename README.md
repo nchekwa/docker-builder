@@ -5,7 +5,7 @@ Docker Builder Script which allows quick build of docker-container
 ***
 *** Built docker container based on Docerfile and predefined variables
 ***
-*** Syntax: ./docker-builder  [-f|v|h|s|S]
+*** Syntax: ./docker-builder  [-f] [-s] [-d] [-h|-v]
     options:
       -f     Force build without prompting, even if an identical image already exists in the repository.
       -s     Save the image to tar.gz file.
