@@ -28,9 +28,9 @@ Help()
    echo "***"
    echo "*** Built docker container based on Docerfile and predefined variables"
    echo "***"
-   echo "*** Syntax: build.sh [-f|v|h|s|S]"
+   echo "*** Syntax: $0  [-f|v|h|s|S]"
    echo "    options:"
-   echo "      -f     Force built without ask, even if same image exist in repository"
+   echo "      -f     Force built without ask, even if the same image exists in the repository"
    echo "      -s     Save image to tar.gz file."
    echo "      -d     If file './docker-compose.yml' exist - try to restart service '${DOCKER_NAME}'"
    echo "      -v     Print software version and exit."
@@ -63,7 +63,7 @@ SaveDockerFile()
     echo "*** You can load this file to repo by 'docker load' command"
     echo "*** ie.# docker load -i <path to image file>"
     echo "***     docker load options:"
-    echo "***        -i, --input string   Read from tar archive file, instead of STDIN"
+    echo "***        -i, --input string   Read from the tar archive file, instead of STDIN"
     echo "***                             (even if compressed with gzip, bzip2, or xz)"
     echo "***        -q, --quiet          Suppress the load output"
     echo ""
@@ -111,10 +111,10 @@ fi
 
 if [[ "$(docker images -q ${DOCKER_NAME}:${VERSION/\~/-} 2> /dev/null)" != "" ]]; then
     if [ "$FORCE_BUILD" = "y" ]; then
-        echo "*** Force flag set: ${DOCKER_NAME}:${VERSION/\~/-} exist in docer repository - will be overwritten"
+        echo "*** Force flag set: ${DOCKER_NAME}:${VERSION/\~/-} exist in docker repository - will be overwritten"
     else
         while true; do
-            read -p "${DOCKER_NAME}:${VERSION/\~/-} exist in docer repository - do you whant to remove it? [y/n]: " answer
+            read -p "${DOCKER_NAME}:${VERSION/\~/-} exist in the docker repository - do you want to remove it? [y/n]: " answer
             case ${answer:0:1} in
                 y|Y)
                     docker rmi ${DOCKER_NAME}:${VERSION/\~/-}
@@ -123,7 +123,7 @@ if [[ "$(docker images -q ${DOCKER_NAME}:${VERSION/\~/-} 2> /dev/null)" != "" ]]
                     echo ""
                     break;;
                 n|N)
-                    echo "ERROR: You can't build new image when image with same tag exist in repository !!!"
+                    echo "ERROR: You can't build a new image when an image with the same tag exists in the repository !!!"
                     echo "All Done."
                     exit;;
                 *) echo "Please answer yes or no [y/n].";;
@@ -146,7 +146,7 @@ fi
 
 # Option -d
 if [ "$FORCE_DOCKER_COMPOSE_RESTART" = "y" ] && [ -f "./docker-compose.yml" ]; then
-    echo "*** File ./docker-compose.yml exist - will try replace service by new image."
+    echo "*** File ./docker-compose.yml exist - will try to replace service by the new image."
     docker-compose stop ${DOCKER_NAME}
     docker-compose rm -f ${DOCKER_NAME}
     docker-compose up -d ${DOCKER_NAME}
