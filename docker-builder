@@ -33,8 +33,8 @@ Help()
    echo "*** Syntax: $0  [-f|v|h|s|S]"
    echo "    options:"
    echo "      -f     Force build without prompting, even if an identical image already exists in the repository."
-   echo "      -s     Save image to tar.gz file."
-   echo "      -d     If file './docker-compose.yml' exist - try to restart service '${BUILD_NAME}'"
+   echo "      -s     Save the image to tar.gz file."
+   echo "      -d     If the file './docker-compose.yml' exist - try to restart service '${BUILD_NAME}'"
    echo "      -v     Print software version and exit."
    echo "      -h     Print this Help."
    echo
