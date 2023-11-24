@@ -30,7 +30,7 @@ Help()
    echo "***"
    echo "*** Syntax: $0  [-f|v|h|s|S]"
    echo "    options:"
-   echo "      -f     Force built without ask, even if the same image exists in the repository"
+   echo "      -f     Force build without prompting, even if an identical image already exists in the repository."
    echo "      -s     Save image to tar.gz file."
    echo "      -d     If file './docker-compose.yml' exist - try to restart service '${BUILD_NAME}'"
    echo "      -v     Print software version and exit."
@@ -111,7 +111,7 @@ fi
 
 if [[ "$(docker images -q ${BUILD_NAME}:${BUILD_VERSION/\~/-} 2> /dev/null)" != "" ]]; then
     if [ "$FORCE_BUILD" = "y" ]; then
-        echo "*** Force flag set: ${BUILD_NAME}:${BUILD_VERSION/\~/-} exist in docker repository - will be overwritten"
+        echo "*** FORCE_BUILD==YES: ${BUILD_NAME}:${BUILD_VERSION/\~/-} exist in docker repository - will be overwritten"
     else
         while true; do
             read -p "${BUILD_NAME}:${BUILD_VERSION/\~/-} exist in the docker repository - do you want to remove it? [y/n]: " answer
