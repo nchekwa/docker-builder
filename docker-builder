@@ -4,22 +4,34 @@ DB_VERSION_DATE="2023-11-24"
 
 
 ############################################################
-# Variables                                                #
+# ENV                                                      #
 ############################################################
-if [ -f build.env ]; then
-    export $(cat build.env | xargs)
-    # env $(cat .env|xargs) CMD
-    # export "$(grep -vE "^(#.*|\s*)$" .env)"
+env_file="build.env"
+build_env="build/$env_file"
+# Function to check if variables are defined
+check_variables() {
+    if [ -z "${BUILD_NAME}" ] || [ -z "${BUILD_VERSION}" ]; then
+        echo "*** ERROR: BUILD_NAME or BUILD_VERSION not defined in $1"
+        exit 1
+    fi
+}
+if [ -f "$env_file" ]; then
+    export $(cat "$env_file" | xargs)
+    check_variables "$env_file"
+    echo "***"
+    echo "Builder: ${BUILD_NAME}:${BUILD_VERSION}"
+elif [ -f "$build_env" ]; then
+    export $(cat "$build_env" | xargs)
+    check_variables "$build_env"
     echo "***"
     echo "Builder: ${BUILD_NAME}:${BUILD_VERSION}"
 else
-    echo "*** ERROR: Missing build.env file where we need BUILD_NAME and BUILD_VERSION"
+    echo "*** ERROR: Missing $env_file file where we need BUILD_NAME and BUILD_VERSION"
     echo "*** use commands to create basic file:"
-    echo "echo 'BUILD_NAME=\"easyrsa\"' > build.env"
-    echo "echo 'BUILD_VERSION=\"1.0\"' >> build.env"
-    exit
+    echo "echo 'BUILD_NAME=\"easyrsa\"' > $env_file"
+    echo "echo 'BUILD_VERSION=\"1.0\"' >> $env_file"
+    exit 1
 fi
-
 
 ############################################################
 # Help                                                     #
