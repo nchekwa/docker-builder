@@ -2,6 +2,11 @@
 Docker Builder Script which allows quick build of docker-container
 
 ```bash
+wget https://raw.githubusercontent.com/nchekwa/docker-builder/main/docker-builder
+```
+<br>
+
+```bash
 ***
 *** Built docker container based on Docerfile and predefined variables
 ***
