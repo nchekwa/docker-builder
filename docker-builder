@@ -1,7 +1,6 @@
 #!/bin/bash
-DB_VERSION="0.21.0"
-DB_VERSION_DATE="2023-11-24"
-
+DB_VERSION="0.22.0"
+DB_VERSION_DATE="2023-12-08"
 
 ############################################################
 # ENV                                                      #
@@ -42,12 +41,13 @@ Help()
    echo "***"
    echo "*** Built docker container based on Docerfile and predefined variables"
    echo "***"
-   echo "*** Syntax: $0  [-f] [-s] [-d] [-h|-v]"
+   echo "*** Syntax: $0  [-f] [-s] [-d] [-l] [-h|-v] "
    echo "    options:"
    echo "      -f     Force build without prompting, even if an identical image already exists in the repository."
    echo "      -s     Save the image to tar.gz file."
    echo "      -d     If the file './docker-compose.yml' exist - try to restart service '${BUILD_NAME}'"
    echo "      -v     Print software version and exit."
+   echo "      -l     Disable cache and log all output to the docker-builder.log file"
    echo "      -h     Print this Help."
    echo
 }
@@ -86,7 +86,7 @@ SaveDockerFile()
 
 # Specifying the optstring
 # https://www.computerhope.com/unix/bash/getopts.htm
-while getopts ":fhvdsS" option; do
+while getopts ":fhvdsSl" option; do
    case $option in
         h)
             Help
@@ -102,6 +102,10 @@ while getopts ":fhvdsS" option; do
             ;;
         d)
             FORCE_DOCKER_COMPOSE_RESTART="y"
+            ;;
+        l)
+            CACHE_OFF="--no-cache --progress=plain"
+            LOGGER='2>&1 | tee docker-builder.log'
             ;;
         \?)
             echo "Error: Invalid option"
@@ -147,7 +151,8 @@ if [[ "$(docker images -q ${BUILD_NAME}:${BUILD_VERSION/\~/-} 2> /dev/null)" != 
 fi
 
 echo "Docker build: ${BUILD_NAME}:${BUILD_VERSION/\~/-}"
-docker build --build-arg VERSION=${BUILD_VERSION} -t ${BUILD_NAME}:${BUILD_VERSION/\~/-} .
+echo "build ${CACHE_OFF} --build-arg VERSION=${BUILD_VERSION} -t ${BUILD_NAME}:${BUILD_VERSION/\~/-} . ${LOGGER}"
+eval "docker build ${CACHE_OFF} --build-arg VERSION=${BUILD_VERSION} -t ${BUILD_NAME}:${BUILD_VERSION/\~/-} . ${LOGGER}"
 echo ""
 echo "Build Completed."
 docker images | grep -e ${BUILD_NAME} -e REPOSITORY
