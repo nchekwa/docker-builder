@@ -45,7 +45,7 @@ Help()
    echo "    options:"
    echo "      -f     Force build without prompting, even if an identical image already exists in the repository."
    echo "      -s     Save the image to tar.gz file."
-   echo "      -d     If the file './docker-compose.yml' exist - try to restart service '${BUILD_NAME}'"
+   echo "      -d     If the file './docker-compose.yml' exists - try to restart service '${BUILD_NAME}'"
    echo "      -v     Print software version and exit."
    echo "      -l     Disable cache and log all output to the docker-builder.log file"
    echo "      -h     Print this Help."
